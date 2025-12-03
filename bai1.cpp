@@ -1,145 +1,159 @@
 #include <stdio.h>
-void DeleteElement(int *arr , int n , int pos) {
-	for (int i = pos ; i < n - 1 ; i++) {
-		arr[i] = arr[i+1];
-	}
-}
-void AddValue(int *arr , int n, int value , int k) {
-	for ( int i = n - 1 ; i >= k ; i--) {
-		arr[i+1]=arr[i];
-	}
-}
-void LostValue(int *arr , int n , int m , int *t) {
-	for(int i = 0 ; i < n ; i++) {
-		if ( arr[i] == m) {
-			for ( int j = i ; j < n - 1 ; j++) {
-				arr[j] = arr[j+1];
-			}
-		(*t)++;
-		i--;
-		}
-	}
-}
-void FindElement(int *arr , int n , int f) {
-	int Found = 0;
-	for (int i = 0 ; i < n ; i++) {
-		if ( arr[i] == f) {
-			printf("Tim thay phan tu o vi tri : a[%d]\n", i);
-			Found = 1;
-	    }
-	    if ( Found == 0) {
-	    	printf("Khong tim thay phan tu t");
-	    }
-		}
-	}
-int MaxValue(int *arr , int n) {
-	int Max = arr[0];
-	for(int i = 0; i < n ; i++) {
-		if ( arr[i] >= Max) {
-			Max = arr[i];
-		}
-	}
-	return Max;
-}
-int MinValue(int *arr , int n) {
-	int Min = arr[0];
-	for(int i = 0; i < n ; i++) {
-		if ( arr[i] <= Min) {
-			Min = arr[i];
-		}
-	}
-	return Min;
-}
-int main() {
-	int arr[100];
-	int n;
-	
-	printf("Nhap so phan tu: ");
-	scanf("%d", &n);
-	
-	for(int i = 0 ; i < n ; i++) {
-		printf("a[%d] = ", i);
-		scanf("%d", &arr[i]);
-	}
-	
-	int choice;
-	do {
-		printf("1. Nhap phan tu can xoa\n");
-        printf("2. Them phan tu vi tri k trong mang\n");
-        printf("3. Xoa gia tri t khoi mang\n");
-        printf("4. Tim gia tri lon nhat trong mang\n");
-        printf("5. Tim gia tri nho nhat trong mang\n");
-        printf("6. Tim gia tri phan tu o vi tri f\n");
 
-		scanf("%d", &choice);
-		
-		switch(choice) {
-			case 1: {
-				int pos;
-				printf("Nhap phan tu can xoa : ");
-				scanf("%d", &pos);
-				
-				DeleteElement(arr,n,pos);
-				n = n - 1;
-				
-				for (int i = 0; i < n ; i++) {
-					printf("%d ", arr[i]);
-				}
-				printf("\n");
-				break;
-			}
-			case 2: {
-				int value,k;
-	            printf("Nhap phan tu chuyen den: ");
-	            scanf("%d", &k);
-	            printf("Nhap gia tri them vao: ");
-	            scanf("%d", &value);
-	
-  	            AddValue(arr,n,value,k);
-	            arr[k] = value;
-	            
-	            n++;
-	            for(int i = 0; i < n ; i++) {
-		            printf("%d ", arr[i]);
-	            }
-	            printf("\n");
-				break;
-			}
-			case 3: {
-				int m,t=0;
-	            printf("Nhap gia tri can xoa: ");
- 	            scanf("%d", &m);
-	
-	
-	            LostValue(arr,n,m,&t);
-	            for(int i = 0; i < n-t ; i++) {
-		            printf("%d ", arr[i]);
-            	}
-            	printf("\n");
-				break;
-			}
-			case 4: {
-				printf("Gia tri lon nhat trong mang la: %d", MaxValue(arr,n));
-				printf("\n");
-				break;
-			}
-			case 5: {
-				printf("Gia tri be nhat trong mang la: %d", MinValue(arr,n));
-				printf("\n");
-				break;
-			}
-			case 6: {
-				int find;
-				
-	            printf("Nhap so find : ");
-	            scanf("%d", &find);
-	            
-	            FindElement(arr,n,find);
-	            printf("\n");
-				break;
-			}
-		}
-	} while(choice != 0);
-	
-return 0;
+
+void removeAt(int *a, int *size, int index) {
+    for (int i = index; i < (*size) - 1; i++) {
+        a[i] = a[i + 1];
+    }
+    (*size)--;
+}
+
+
+void insertAt(int *a, int *size, int value, int index) {
+    for (int i = (*size) - 1; i >= index; i--) {
+        a[i + 1] = a[i];
+    }
+    a[index] = value;
+    (*size)++;
+}
+
+
+int findFirst(int *a, int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (a[i] == target)
+            return i;
+    }
+    return -1;
+}
+
+
+void removeAll(int *a, int *size, int target) {
+    int pos;
+    while ((pos = findFirst(a, *size, target)) != -1) {
+        removeAt(a, size, pos);
+    }
+}
+
+
+int getMax(int *a, int size) {
+    int max = a[0];
+    for (int i = 1; i < size; i++)
+        if (a[i] > max)
+            max = a[i];
+    return max;
+}
+
+
+int getMin(int *a, int size) {
+    int min = a[0];
+    for (int i = 1; i < size; i++)
+        if (a[i] < min)
+            min = a[i];
+    return min;
+}
+
+int main() {
+    int a[100];
+    int n;
+
+    printf("Nhap so phan tu: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("a[%d] = ", i);
+        scanf("%d", &a[i]);
+    }
+
+    int choice;
+
+    do {
+        printf("1. Xoa phan tu tai vi tri\n");
+        printf("2. Them phan tu tai vi tri k\n");
+        printf("3. Xoa tat ca phan tu co gia tri x\n");
+        printf("4. Tim gia tri lon nhat\n");
+        printf("5. Tim gia tri nho nhat\n");
+        printf("6. Tim vi tri cua gia tri x\n");
+        printf("Nhap lua chon: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+
+            case 1: {
+                int index;
+                printf("Nhap vi tri can xoa: ");
+                scanf("%d", &index);
+
+                removeAt(a, &n, index);
+
+                for (int i = 0; i < n; i++)
+                    printf("%d ", a[i]);
+                printf("\n");
+
+                break;
+            }
+
+            case 2: {
+                int index, value;
+                printf("Nhap vi tri chen: ");
+                scanf("%d", &index);
+                printf("Nhap gia tri: ");
+                scanf("%d", &value);
+
+                insertAt(a, &n, value, index);
+
+                for (int i = 0; i < n; i++)
+                    printf("%d ", a[i]);
+                printf("\n");
+
+                break;
+            }
+
+            case 3: {
+                int value;
+                printf("Nhap gia tri can xoa: ");
+                scanf("%d", &value);
+
+                removeAll(a, &n, value);
+
+                for (int i = 0; i < n; i++)
+                    printf("%d ", a[i]);
+                printf("\n");
+
+                break;
+            }
+
+            case 4:
+                printf("Gia tri lon nhat: %d\n", getMax(a, n));
+                break;
+
+            case 5:
+                printf("Gia tri nho nhat: %d\n", getMin(a, n));
+                break;
+
+            case 6: {
+                int value;
+                printf("Nhap gia tri can tim: ");
+                scanf("%d", &value);
+
+                int pos = findFirst(a, n, value);
+
+                if (pos == -1)
+                    printf("Khong tim thay phan tu!\n");
+                else
+                    printf("Tim thay tai vi tri a[%d]\n", pos);
+
+                break;
+            }
+
+            case 0:
+                printf("Thoat chuong trinh.\n");
+                break;
+
+            default:
+                printf("Lua chon khong hop le!\n");
+        }
+
+    } while (choice != 0);
+
+    return 0;
 }
